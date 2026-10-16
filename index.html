@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ride to Polaris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Saira+Condensed:wght@500;700;800&family=Share+Tech+Mono&display=swap">
+<style>
+/* ===== 1. COULEURS ET POLICES : change les valeurs ici pour modifier tout le thème ===== */
+:root{
+  --asphalt:#141416;     /* fond principal (bitume) */
+  --asphalt-2:#1f1f23;   /* cartes */
+  --line:#34343a;        /* bordures */
+  --chrome:#e9e6df;      /* texte principal */
+  --muted:#9b978e;       /* texte secondaire */
+  --fuel:#ff6a13;        /* accent orange (réservoir) */
+  --road:#f2c230;        /* jaune marquage au sol */
+  --bad:#e5383b;         /* rouge erreur */
+  --display:"Saira Stencil One",Impact,sans-serif;
+  --body:"Saira Condensed","Arial Narrow",sans-serif;
+  --mono:"Share Tech Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:
+  repeating-linear-gradient(135deg,transparent 0 22px,rgba(255,255,255,.015) 22px 23px),
+  radial-gradient(120% 60% at 50% 0%,#232327,var(--asphalt) 70%);
+  background-color:var(--asphalt);color:var(--chrome);font-family:var(--body);font-size:18px;line-height:1.45}
+.wrap{max-width:660px;margin:0 auto;padding:28px 16px 56px;display:flex;flex-direction:column;gap:22px}
+
+/* En-tête */
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--road)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,58px);line-height:.95;margin:6px 0 0;text-transform:uppercase}
+h1 em{font-style:normal;color:var(--fuel)}
+.lede{color:var(--muted);margin:0;max-width:58ch}
+
+/* Compteur (altitude façon compte-tours) */
+.gauge{width:118px;flex:none}
+.gauge .bg{fill:none;stroke:var(--line);stroke-width:10;stroke-linecap:round}
+.gauge .val{fill:none;stroke:var(--fuel);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .6s}
+.gauge .red{fill:none;stroke:var(--bad);stroke-width:10;stroke-linecap:round}
+.gauge text{fill:var(--chrome);font-family:var(--mono);text-anchor:middle}
+
+/* Route de montagne */
+.road{width:100%;height:auto;display:block}
+.road .hill{fill:#232327}
+.road .peak{fill:#2c2c31}
+.road .snow{fill:var(--chrome);opacity:.8}
+.road .asph{fill:none;stroke:#0b0b0c;stroke-width:12;stroke-linejoin:round}
+.road .mark{fill:none;stroke:var(--road);stroke-width:2;stroke-dasharray:8 8;stroke-linejoin:round;opacity:.7}
+.road .done{fill:none;stroke:var(--fuel);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}
+.road .lbl{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.road .bike circle{fill:none;stroke:var(--chrome);stroke-width:2}
+.road .bike path{fill:var(--fuel)}
+
+/* Carte question */
+.card{background:var(--asphalt-2);border:1px solid var(--line);border-left:6px solid var(--fuel);border-radius:6px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.qmeta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.qmeta .tag{color:var(--road)}
+.q{font-weight:700;font-size:clamp(21px,5vw,26px);line-height:1.2;margin:0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:460px){.opts{grid-template-columns:1fr}}
+.opt{font:inherit;font-weight:600;text-align:left;color:var(--chrome);background:var(--asphalt);border:1px solid var(--line);border-radius:4px;padding:12px 14px;cursor:pointer;transition:border-color .15s}
+.opt:hover{border-color:var(--road)}
+.opt:focus-visible{outline:2px solid var(--road);outline-offset:2px}
+.opt.right{border-color:var(--fuel);background:color-mix(in srgb,var(--fuel) 22%,var(--asphalt))}
+.opt.wrong{border-color:var(--bad);opacity:.5}
+.opt:disabled{cursor:default}
+.feedback{min-height:1.5em;margin:0;color:var(--muted)}
+.feedback.ok{color:var(--road)}.feedback.ko{color:var(--bad)}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.next{align-self:flex-end;font-family:var(--display);font-size:18px;text-transform:uppercase;color:var(--asphalt);background:var(--fuel);border:0;border-radius:4px;padding:10px 22px;cursor:pointer}
+.next:focus-visible{outline:2px solid var(--road);outline-offset:3px}
+
+/* Billet final */
+.ticket{border-radius:8px;background:repeating-linear-gradient(45deg,var(--road) 0 14px,var(--asphalt) 14px 28px);padding:6px}
+.ticket-in{background:var(--asphalt-2);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:18px}
+.ticket h2{font-family:var(--display);font-weight:400;font-size:clamp(32px,8vw,48px);line-height:1;margin:0;text-transform:uppercase}
+.ticket h2 small{display:block;font-family:var(--body);font-size:.4em;font-weight:700;color:var(--fuel);margin-top:8px;letter-spacing:.06em}
+.rows{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:0}
+.rows dt{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:4px}
+.rows dd{margin:0;min-width:0}
+.perf{border-top:2px dashed var(--line)}
+.note{margin:0;color:var(--muted);font-size:16px}
+.sign{font-weight:800;font-size:20px;color:var(--fuel);margin:0}
+.again{align-self:flex-start;font:inherit;font-size:15px;color:var(--muted);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0}
+.pop{animation:pop .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.9);opacity:.3}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div style="min-width:0">
+      <h1>Ride to the <em>top</em></h1>
+    </div>
+    <svg class="gauge" viewBox="0 0 120 92" aria-live="polite" role="img" aria-label="Altitude">
+      <path class="bg"  d="M15 80 A50 50 0 1 1 105 80"/>
+      <path class="red" d="M95 38 A50 50 0 0 1 105 80" opacity=".5"/>
+      <path class="val" id="gval" d="M15 80 A50 50 0 1 1 105 80"/>
+      <text x="60" y="62" font-size="18" id="alt">0 m</text>
+      <text x="60" y="80" font-size="9" fill="currentColor" style="fill:var(--muted)">ALTITUDE</text>
+    </svg>
+  </header>
+  <p class="lede">A gift is waiting for you at the summit. Every right answer shifts you up a gear ghir werina 7ennet idik.</p>
+
+  <!-- 2. LA ROUTE : virages en épingle qui montent jusqu'au sommet -->
+  <svg class="road" viewBox="0 0 600 200" role="img" aria-label="Progress on the mountain road">
+    <path class="hill" d="M0 200 L0 175 L120 150 L260 95 L380 70 L470 30 L520 12 L600 40 L600 200 Z"/>
+    <path class="peak" d="M330 200 L470 30 L520 12 L600 60 L600 200 Z"/>
+    <path class="snow" d="M495 22 L520 12 L545 25 L530 30 L515 24 Z"/>
+    <path id="trail" class="asph" d="M20 182 L300 168 L120 140 L360 122 L200 96 L420 82 L300 58 L470 46 L520 18"/>
+    <path class="mark" d="M20 182 L300 168 L120 140 L360 122 L200 96 L420 82 L300 58 L470 46 L520 18"/>
+    <path id="done" class="done" d=""/>
+    <g id="bike" class="bike">
+      <circle cx="-7" cy="0" r="5"/><circle cx="7" cy="0" r="5"/>
+      <path d="M-6 -4 L2 -10 L9 -6 L6 -2 Z"/>
+    </g>
+    <text class="lbl" x="20" y="197">Fontenay-aux-Roses</text>
+    <text class="lbl" x="590" y="197" text-anchor="end" id="endlbl">??? · 1,500 m</text>
+  </svg>
+
+  <main id="stage"></main>
+</div>
+
+<script>
+/* ===== 3. LES QUESTIONS : modifie le texte, les choix (o) et la bonne réponse (a = position, en partant de 0) ===== */
+const QUESTIONS = [
+  {tag:"Electro", q:"Which helmet-wearing French duo released the album “Discovery” in 2001?",
+   o:["Justice","Daft Punk","Air","Cassius"], a:1, ok:"The robots salute you."},
+  {tag:"Moto", q:"On a motorcycle, what does the number before “cc” (e.g. 650 cc) measure?",
+   o:["Top speed","Torque","Engine displacement","Dry weight"], a:2, ok:"650 coucou"},
+  {tag:"Mountain", q:"You've already stood on the roof of Africa. How high is Uhuru Peak on Kilimanjaro?",
+   o:["4,167 m","5,137 m","5,895 m","6,962 m"], a:2, ok:"You climbed it o nta m3tob, so this one was free."},
+  {tag:"Mountain", q:"And in Turkey, which 5,000 m+ giant did you conquer?",
+   o:["Mount Erciyes","Mount Ararat","Mount Kaçkar","Mount Nemrut"], a:1, ok:"5137 m…pff ez peazy."},
+  {tag:"Anime", q:"In “Akira” (1988), what colour is Kaneda's iconic motorcycle?",
+   o:["Black","Red","White","Yellow"], a:1, ok:"Red…the most famous slide in anime history (walakin dima khedra)."},
+  {tag:"Moto", q:"In a corner, what's the name of the move where the rider drops a knee to the asphalt?",
+   o:["Wheelie","Stoppie","Knee down","Burnout"], a:2, ok:"a7"},
+  {tag:"3D printing", q:"In FDM 3D printing, what does “FDM” stand for?",
+   o:["Fast Digital Molding","Fused Deposition Modeling","Filament Direct Melting","Flexible Design Mode"], a:1, ok:"No idea what this is"},
+  {tag:"3D printing", q:"Which beginner-friendly filament is made from plant starch, like corn?",
+   o:["ABS","PETG","PLA","TPU"], a:2, ok:"No idea what this is 2"},
+  {tag:"Game of Thrones", q:"What was the name of Ned Stark's Valyrian steel greatsword, later melted down by Tywin Lannister?",
+   o:["Longclaw","Ice","Widow's Wail","Dawn"], a:1, ok:"Winter is coming… and so is your surprise."},
+  {tag:"One Piece", q:"What is Luffy's dream?",
+   o:["Find the All Blue","Become King of the Pirates","Defeat Shanks","Map the whole world"], a:1, ok:"And you, king of n3ass in every position."},
+  {tag:"Attack on Titan", q:"What gear lets the Survey Corps fly between the Titans?",
+   o:["Thunder spears","ODM gear","Titan serum","Grappling bow"], a:1, ok:"Shinzou wo sasageyo!"},
+  {tag:"Gaming", q:"Which studio made Elden Ring and the Dark Souls series?",
+   o:["CD Projekt Red","FromSoftware","Naughty Dog","Bethesda"], a:1, ok:"You died… but not here."},
+  {tag:"Electro", q:"A classic techno track usually runs at around…",
+   o:["80–90 BPM","100–110 BPM","125–135 BPM","170–175 BPM"], a:2, ok:"Right on the beat."},
+  {tag:"Final clue", q:"Last bend. Before using her real name, under which alias did Charlotte de Witte start DJing?",
+   o:["Dark Charlotte","Raving George","Lady Ghent","CDW Unit"], a:1, ok:"3la slamtek your queen is waiting for you"}
+];
+const TOP = 1500;
+const STEP = TOP / QUESTIONS.length;
+let state = {i:0, alt:0};
+
+const $ = s => document.querySelector(s);
+const trail=$("#trail"), done=$("#done"), bike=$("#bike"), gval=$("#gval");
+const total=trail.getTotalLength(), gLen=gval.getTotalLength();
+gval.style.strokeDasharray=gLen;
+
+function update(){
+  const len = total*Math.min(state.alt/TOP,1);
+  const p = trail.getPointAtLength(len);
+  bike.setAttribute("transform",`translate(${p.x} ${p.y-6})`);
+  const pts=[]; for(let l=0;l<=len;l+=5){const q=trail.getPointAtLength(l);pts.push(q.x.toFixed(1)+" "+q.y.toFixed(1));}
+  pts.push(p.x.toFixed(1)+" "+p.y.toFixed(1));
+  done.setAttribute("d", pts.length>1 ? "M"+pts.join(" L") : "");
+  gval.style.strokeDashoffset = gLen*(1-state.alt/TOP);
+  $("#alt").textContent = Math.round(state.alt).toLocaleString("en-US")+" m";
+}
+
+function renderQuestion(){
+  const Q=QUESTIONS[state.i];
+  $("#stage").innerHTML=`
+    <section class="card" aria-live="polite">
+      <div class="qmeta"><span class="tag">${Q.tag}</span><span>Gear ${state.i+1} / ${QUESTIONS.length}</span></div>
+      <p class="q">${Q.q}</p>
+      <div class="opts">${Q.o.map((t,k)=>`<button class="opt" data-k="${k}">${t}</button>`).join("")}</div>
+      <p class="feedback" id="fb">&nbsp;</p>
+    </section>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.k,b));
+}
+
+function answer(k,btn){
+  const Q=QUESTIONS[state.i], fb=$("#fb"), card=$(".card");
+  if(k===Q.a){
+    btn.classList.add("right");
+    card.querySelectorAll(".opt").forEach(b=>b.disabled=true);
+    fb.className="feedback ok"; fb.textContent=Q.ok;
+    state.alt=STEP*(state.i+1); update();
+    const last=state.i===QUESTIONS.length-1;
+    const n=document.createElement("button");
+    n.className="next"; n.textContent= last ? "Open your gift" : "Shift up";
+    n.onclick=()=>{ if(last) renderGift(); else {state.i++; renderQuestion();} };
+    card.appendChild(n); n.focus();
+  } else {
+    btn.classList.add("wrong"); btn.disabled=true;
+    card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
+    state.alt=Math.max(0,state.alt-200); update();
+    fb.className="feedback ko"; fb.textContent="Wroooong, muahaha";
+  }
+}
+
+/* ===== 4. LE CADEAU : texte du billet et du message ===== */
+function renderGift(){
+  state.alt=TOP; update();
+  $("#endlbl").textContent="Le Châble · 1,500 m";
+  $("#stage").innerHTML=`
+    <section class="ticket pop" aria-live="polite">
+      <div class="ticket-in">
+        <span class="eyebrow">Summit reached · your gift</span>
+        <h2>Polaris 2026</h2>
+        <dl class="rows">
+          <dt>Dates</dt><dd>27 &amp; 28 November 2026</dd>
+          <dt>Country</dt><dd>Switzerland</dd>
+          <dt>On stage</dt><dd><strong style="color:var(--fuel)">Charlotte de Witte</strong>, yes, DJiya 7ob 9elbek.</dd>
+        </dl>
+        <div class="perf"></div>
+        <p class="note">All the details are in your ticket, coming by message.</p>
+        <p class="sign">To kick off your 30th year with a straight shot of dopamine b lkezz, heavy bass and titiza dyalek on stage. Happy birthday Achraf.</p>
+        <button class="again" id="again">Ride again</button>
+      </div>
+    </section>`;
+  $("#again").onclick=()=>{state={i:0,alt:0};$("#endlbl").textContent="??? · 1,500 m";update();renderQuestion();};
+}
+
+update(); renderQuestion();
+</script>
+</body>
+</html>
