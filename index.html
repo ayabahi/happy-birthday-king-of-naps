@@ -5,160 +5,214 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sana 7ilwa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Saira+Condensed:wght@500;700;800&family=Share+Tech+Mono&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
 /* ===== 1. COULEURS ET POLICES : change les valeurs ici pour modifier tout le thème ===== */
 :root{
-  --asphalt:#141416;     /* fond principal (bitume) */
-  --asphalt-2:#1f1f23;   /* cartes */
-  --line:#34343a;        /* bordures */
-  --chrome:#e9e6df;      /* texte principal */
-  --muted:#9b978e;       /* texte secondaire */
-  --fuel:#ff6a13;        /* accent orange (réservoir) */
-  --road:#f2c230;        /* jaune marquage au sol */
-  --bad:#e5383b;         /* rouge erreur */
-  --display:"Saira Stencil One",Impact,sans-serif;
-  --body:"Saira Condensed","Arial Narrow",sans-serif;
-  --mono:"Share Tech Mono",ui-monospace,monospace;
+  --asphalt:#0f0f11;     /* fond principal (bitume) */
+  --asphalt-2:#18181c;   /* cartes */
+  --asphalt-3:#222228;   /* boutons */
+  --line:#2f2f37;        /* bordures */
+  --chrome:#f1eee8;      /* texte principal */
+  --muted:#8f8b84;       /* texte secondaire */
+  --fuel:#ff5b14;        /* accent orange (réservoir) */
+  --road:#ffc627;        /* jaune marquage au sol */
+  --bad:#ff3b3f;         /* rouge erreur */
+  --display:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;
+  --body:"Barlow",system-ui,sans-serif;
+  --label:"Barlow Condensed","Arial Narrow",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:
-  repeating-linear-gradient(135deg,transparent 0 22px,rgba(255,255,255,.015) 22px 23px),
-  radial-gradient(120% 60% at 50% 0%,#232327,var(--asphalt) 70%);
-  background-color:var(--asphalt);color:var(--chrome);font-family:var(--body);font-size:18px;line-height:1.45}
-.wrap{max-width:660px;margin:0 auto;padding:28px 16px 56px;display:flex;flex-direction:column;gap:22px}
+html{background:var(--asphalt)}
+body{margin:0;min-height:100vh;color:var(--chrome);font-family:var(--body);font-size:17px;line-height:1.5;
+  background:
+    radial-gradient(90% 50% at 85% -10%,rgba(255,91,20,.18),transparent 60%),
+    radial-gradient(70% 40% at 0% 0%,rgba(255,198,39,.07),transparent 60%),
+    var(--asphalt);}
+/* grain léger façon bitume */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.07;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:32px 16px 64px;display:flex;flex-direction:column;gap:24px}
 
 /* En-tête */
-.top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap}
-.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--road)}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,58px);line-height:.95;margin:6px 0 0;text-transform:uppercase}
-h1 em{font-style:normal;color:var(--fuel)}
-.lede{color:var(--muted);margin:0;max-width:58ch}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.title{min-width:0;display:flex;flex-direction:column;gap:10px}
+.stripe{width:84px;height:8px;background:repeating-linear-gradient(-60deg,var(--fuel) 0 8px,transparent 8px 14px)}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(48px,13vw,92px);line-height:.82;letter-spacing:-.01em;margin:0;text-transform:uppercase}
+h1 .outline{color:transparent;-webkit-text-stroke:1.5px var(--chrome)}
+h1 em{font-style:normal;color:var(--fuel);display:inline-block;transform:skewX(-8deg)}
+.lede{margin:0;font-family:var(--label);font-weight:600;font-size:19px;letter-spacing:.02em;color:var(--chrome);
+  display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
+  padding:8px 14px;border:1px solid var(--line);background:var(--asphalt-2);border-radius:999px}
+.lede::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--road);box-shadow:0 0 12px var(--road)}
 
 /* Compteur (altitude façon compte-tours) */
-.gauge{width:118px;flex:none}
-.gauge .bg{fill:none;stroke:var(--line);stroke-width:10;stroke-linecap:round}
-.gauge .val{fill:none;stroke:var(--fuel);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .6s}
-.gauge .red{fill:none;stroke:var(--bad);stroke-width:10;stroke-linecap:round}
-.gauge text{fill:var(--chrome);font-family:var(--mono);text-anchor:middle}
+.gauge{width:132px;flex:none}
+.gauge .bg{fill:none;stroke:var(--asphalt-3);stroke-width:9;stroke-linecap:round}
+.gauge .val{fill:none;stroke:var(--fuel);stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .7s cubic-bezier(.3,.9,.3,1);filter:drop-shadow(0 0 6px rgba(255,91,20,.55))}
+.gauge .red{fill:none;stroke:var(--bad);stroke-width:3}
+.gauge .tick{stroke:var(--muted);stroke-width:1.5}
+.gauge .num{fill:var(--chrome);font-family:var(--display);font-weight:900;text-anchor:middle}
+.gauge .unit{fill:var(--muted);font-family:var(--label);font-weight:600;letter-spacing:.18em;text-anchor:middle}
 
 /* Route de montagne */
+.road-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(#1b1b21,#121215)}
 .road{width:100%;height:auto;display:block}
-.road .hill{fill:#232327}
-.road .peak{fill:#2c2c31}
-.road .snow{fill:var(--chrome);opacity:.8}
-.road .asph{fill:none;stroke:#0b0b0c;stroke-width:12;stroke-linejoin:round}
-.road .mark{fill:none;stroke:var(--road);stroke-width:2;stroke-dasharray:8 8;stroke-linejoin:round;opacity:.7}
-.road .done{fill:none;stroke:var(--fuel);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}
-.road .lbl{fill:var(--muted);font-family:var(--mono);font-size:11px}
-.road .bike circle{fill:none;stroke:var(--chrome);stroke-width:2}
+.road .far{fill:#1f1f26}
+.road .hill{fill:#26262e}
+.road .peak{fill:#30303a}
+.road .snow{fill:var(--chrome);opacity:.85}
+.road .star{fill:var(--chrome)}
+.road .asph{fill:none;stroke:#08080a;stroke-width:13;stroke-linejoin:round;stroke-linecap:round}
+.road .mark{fill:none;stroke:var(--road);stroke-width:1.6;stroke-dasharray:7 9;stroke-linejoin:round;opacity:.65}
+.road .done{fill:none;stroke:var(--fuel);stroke-width:4;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(255,91,20,.7))}
+.road .lbl{fill:var(--muted);font-family:var(--label);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.road .bike circle{fill:#08080a;stroke:var(--chrome);stroke-width:2}
 .road .bike path{fill:var(--fuel)}
+.road .flag rect{shape-rendering:crispEdges}
 
 /* Carte question */
-.card{background:var(--asphalt-2);border:1px solid var(--line);border-left:6px solid var(--fuel);border-radius:6px;padding:22px;display:flex;flex-direction:column;gap:16px}
-.qmeta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
-.qmeta .tag{color:var(--road)}
-.q{font-weight:700;font-size:clamp(21px,5vw,26px);line-height:1.2;margin:0}
+.card{position:relative;background:var(--asphalt-2);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
+.card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--fuel)}
+.qmeta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--asphalt);background:var(--road);padding:3px 10px 2px;border-radius:3px;transform:skewX(-10deg)}
+.gear{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.gear b{font-family:var(--display);font-weight:900;font-size:22px;color:var(--chrome);line-height:1}
+/* barre de LEDs façon compte-tours */
+.rev{display:flex;gap:3px}
+.rev i{width:9px;height:12px;border-radius:2px;background:var(--asphalt-3)}
+.rev i.on{background:var(--road);box-shadow:0 0 6px var(--road)}
+.rev i.on.hot{background:var(--fuel);box-shadow:0 0 6px var(--fuel)}
+.rev i.on.max{background:var(--bad);box-shadow:0 0 6px var(--bad)}
+.q{font-family:var(--body);font-weight:600;font-size:clamp(21px,5vw,26px);line-height:1.25;margin:0;text-wrap:balance}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media (max-width:460px){.opts{grid-template-columns:1fr}}
-.opt{font:inherit;font-weight:600;text-align:left;color:var(--chrome);background:var(--asphalt);border:1px solid var(--line);border-radius:4px;padding:12px 14px;cursor:pointer;transition:border-color .15s}
-.opt:hover{border-color:var(--road)}
+@media (max-width:480px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;font:inherit;font-weight:500;text-align:left;color:var(--chrome);background:var(--asphalt-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .15s,transform .15s,background .15s}
+.opt .key{flex:none;width:26px;height:26px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px}
+.opt:hover:not(:disabled){border-color:var(--road);transform:translateY(-1px)}
+.opt:hover:not(:disabled) .key{color:var(--road);border-color:var(--road)}
 .opt:focus-visible{outline:2px solid var(--road);outline-offset:2px}
-.opt.right{border-color:var(--fuel);background:color-mix(in srgb,var(--fuel) 22%,var(--asphalt))}
-.opt.wrong{border-color:var(--bad);opacity:.5}
+.opt.right{border-color:var(--fuel);background:color-mix(in srgb,var(--fuel) 20%,var(--asphalt-2))}
+.opt.right .key{background:var(--fuel);border-color:var(--fuel);color:var(--asphalt)}
+.opt.wrong{border-color:var(--bad);opacity:.45;text-decoration:line-through}
 .opt:disabled{cursor:default}
-.feedback{min-height:1.5em;margin:0;color:var(--muted)}
+.feedback{min-height:1.5em;margin:0;font-family:var(--body);font-weight:500;font-size:18px;line-height:1.45;color:var(--muted)}
 .feedback.ok{color:var(--road)}.feedback.ko{color:var(--bad)}
 .shake{animation:shake .35s}
-@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.next{align-self:flex-end;font-family:var(--display);font-size:18px;text-transform:uppercase;color:var(--asphalt);background:var(--fuel);border:0;border-radius:4px;padding:10px 22px;cursor:pointer}
-.next:focus-visible{outline:2px solid var(--road);outline-offset:3px}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.next{align-self:flex-end;font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:.04em;text-transform:uppercase;color:var(--asphalt);background:var(--fuel);border:0;padding:10px 26px;cursor:pointer;transform:skewX(-12deg);box-shadow:4px 4px 0 var(--road);transition:transform .15s,box-shadow .15s}
+.next span{display:inline-block;transform:skewX(12deg)}
+.next:hover{transform:skewX(-12deg) translate(-2px,-2px);box-shadow:6px 6px 0 var(--road)}
+.next:focus-visible{outline:2px solid var(--chrome);outline-offset:4px}
 
 /* Billet final */
-.ticket{border-radius:8px;background:repeating-linear-gradient(45deg,var(--road) 0 14px,var(--asphalt) 14px 28px);padding:6px}
-.ticket-in{background:var(--asphalt-2);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:18px}
-.ticket h2{font-family:var(--display);font-weight:400;font-size:clamp(32px,8vw,48px);line-height:1;margin:0;text-transform:uppercase}
-.ticket h2 small{display:block;font-family:var(--body);font-size:.4em;font-weight:700;color:var(--fuel);margin-top:8px;letter-spacing:.06em}
-.rows{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:0}
-.rows dt{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:4px}
-.rows dd{margin:0;min-width:0}
-.perf{border-top:2px dashed var(--line)}
-.note{margin:0;color:var(--muted);font-size:16px}
-.sign{font-weight:800;font-size:20px;color:var(--fuel);margin:0}
-.again{align-self:flex-start;font:inherit;font-size:15px;color:var(--muted);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0}
-.pop{animation:pop .6s cubic-bezier(.2,1.4,.4,1)}
-@keyframes pop{from{transform:scale(.9);opacity:.3}}
+.ticket{position:relative;border-radius:16px;overflow:hidden;background:var(--asphalt-2);border:1px solid var(--line)}
+.checker{height:22px;background:
+  conic-gradient(var(--chrome) 25%,#0b0b0d 0 50%,var(--chrome) 0 75%,#0b0b0d 0) 0 0/22px 22px}
+.ticket-in{padding:26px 24px 24px;display:flex;flex-direction:column;gap:20px}
+.eyebrow{font-family:var(--label);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--road)}
+.ticket h2{font-family:var(--display);font-weight:900;font-size:clamp(54px,15vw,96px);line-height:.85;margin:0;text-transform:uppercase}
+.ticket h2 span{color:var(--fuel)}
+.rows{display:grid;grid-template-columns:auto 1fr;gap:12px 20px;margin:0}
+.rows dt{font-family:var(--label);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.rows dd{margin:0;min-width:0;font-weight:500;font-size:18px}
+.perf{position:relative;border-top:2px dashed var(--line);margin-inline:-24px}
+.perf::before,.perf::after{content:"";position:absolute;top:-12px;width:22px;height:22px;border-radius:50%;background:var(--asphalt)}
+.perf::before{left:-11px}.perf::after{right:-11px}
+.note{margin:0;color:var(--muted);font-size:15px}
+.sign{margin:0;font-family:var(--body);font-weight:500;font-size:19px;line-height:1.5;color:#e1a91a}
+.sign strong{color:var(--fuel)}
+.again{align-self:flex-start;font-family:var(--label);font-weight:600;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;padding:0 0 2px}
+.again:hover{color:var(--chrome)}
+.pop{animation:pop .7s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:translateY(16px) scale(.96);opacity:0}}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:5}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <div style="min-width:0">
-      <h1>Ride to the <em>top</em></h1>
+    <div class="title">
+      <div class="stripe" aria-hidden="true"></div>
+      <h1><span class="outline">Ride to</span><br>the <em>top</em></h1>
     </div>
-    <svg class="gauge" viewBox="0 0 120 92" aria-live="polite" role="img" aria-label="Altitude">
+    <svg class="gauge" viewBox="0 0 120 96" aria-live="polite" role="img" aria-label="Altitude">
       <path class="bg"  d="M15 80 A50 50 0 1 1 105 80"/>
-      <path class="red" d="M95 38 A50 50 0 0 1 105 80" opacity=".5"/>
-      <path class="val" id="gval" d="M15 80 A50 50 0 1 1 105 80"/>
-      <text x="60" y="62" font-size="18" id="alt">0 m</text>
-      <text x="60" y="80" font-size="9" fill="currentColor" style="fill:var(--muted)">ALTITUDE</text>
+            <path class="val" id="gval" d="M15 80 A50 50 0 1 1 105 80"/>
+      <g id="ticks"></g>
+      <text class="num" x="60" y="66" font-size="24" id="alt">0</text>
+      <text class="unit" x="60" y="84" font-size="9">METRES</text>
     </svg>
   </header>
   <p class="lede">Baraka men fhamat o jawb 3la as2ila</p>
 
   <!-- 2. LA ROUTE : virages en épingle qui montent jusqu'au sommet -->
-  <svg class="road" viewBox="0 0 600 200" role="img" aria-label="Progress on the mountain road">
-    <path class="hill" d="M0 200 L0 175 L120 150 L260 95 L380 70 L470 30 L520 12 L600 40 L600 200 Z"/>
-    <path class="peak" d="M330 200 L470 30 L520 12 L600 60 L600 200 Z"/>
-    <path class="snow" d="M495 22 L520 12 L545 25 L530 30 L515 24 Z"/>
-    <path id="trail" class="asph" d="M20 182 L300 168 L120 140 L360 122 L200 96 L420 82 L300 58 L470 46 L520 18"/>
-    <path class="mark" d="M20 182 L300 168 L120 140 L360 122 L200 96 L420 82 L300 58 L470 46 L520 18"/>
+  <div class="road-wrap">
+  <svg class="road" viewBox="0 0 600 210" role="img" aria-label="Progress on the mountain road">
+    <circle class="star" cx="60" cy="24" r="1.2" opacity=".6"/><circle class="star" cx="150" cy="14" r="1" opacity=".4"/>
+    <circle class="star" cx="240" cy="30" r="1.3" opacity=".5"/><circle class="star" cx="380" cy="18" r="1" opacity=".5"/>
+    <path class="far" d="M0 210 L0 120 L80 90 L150 110 L230 70 L300 95 L360 60 L420 80 L600 70 L600 210 Z"/>
+    <path class="hill" d="M0 210 L0 180 L120 155 L260 100 L380 75 L470 34 L520 16 L600 44 L600 210 Z"/>
+    <path class="peak" d="M330 210 L470 34 L520 16 L600 64 L600 210 Z"/>
+    <path class="snow" d="M494 27 L520 16 L546 30 L531 34 L516 27 L505 33 Z"/>
+    <path id="trail" class="asph" d="M20 190 L300 176 L120 148 L360 128 L200 102 L420 88 L300 62 L470 50 L520 22"/>
+    <path class="mark" d="M20 190 L300 176 L120 148 L360 128 L200 102 L420 88 L300 62 L470 50 L520 22"/>
     <path id="done" class="done" d=""/>
-    <g id="bike" class="bike">
-      <circle cx="-7" cy="0" r="5"/><circle cx="7" cy="0" r="5"/>
-      <path d="M-6 -4 L2 -10 L9 -6 L6 -2 Z"/>
+    <g class="flag" transform="translate(520 4)">
+      <rect x="0" y="0" width="1.5" height="18" fill="var(--chrome)"/>
+      <rect x="1.5" y="0" width="5" height="4" fill="var(--chrome)"/><rect x="6.5" y="0" width="5" height="4" fill="#0b0b0d"/>
+      <rect x="1.5" y="4" width="5" height="4" fill="#0b0b0d"/><rect x="6.5" y="4" width="5" height="4" fill="var(--chrome)"/>
     </g>
-    <text class="lbl" x="20" y="197">Fontenay-aux-Roses</text>
-    <text class="lbl" x="590" y="197" text-anchor="end" id="endlbl">??? · 1,500 m</text>
+    <g id="bike" class="bike">
+      <circle cx="-7" cy="0" r="4.5"/><circle cx="7" cy="0" r="4.5"/>
+      <path d="M-6 -4 L2 -11 L10 -6 L6 -2 Z"/>
+    </g>
+    <text class="lbl" x="20" y="205">Fontenay-aux-Roses</text>
+    <text class="lbl" x="590" y="205" text-anchor="end" id="endlbl">??? · 1,500 m</text>
   </svg>
+  </div>
 
   <main id="stage"></main>
 </div>
+<canvas id="confetti" hidden></canvas>
 
 <script>
 /* ===== 3. LES QUESTIONS : modifie le texte, les choix (o) et la bonne réponse (a = position, en partant de 0) ===== */
 const QUESTIONS = [
-  {tag:"Electro", q:"Which helmet-wearing French duo released the album “Discovery” in 2001?",
+  {q:"Which helmet-wearing French duo released the album “Discovery” in 2001?",
    o:["Justice","Daft Punk","Air","Cassius"], a:1, ok:"The robots salute you"},
-  {tag:"Moto", q:"On a motorcycle, what does the number before “cc” (e.g. 650 cc) measure?",
+  {q:"On a motorcycle, what does the number before “cc” (e.g. 650 cc) measure?",
    o:["Top speed","Torque","Engine displacement","Dry weight"], a:2, ok:"650 coucou"},
-  {tag:"Mountain", q:"You've already stood on the roof of Africa. How high is Uhuru Peak on Kilimanjaro?",
+  {q:"You've already stood on the roof of Africa. How high is Uhuru Peak on Kilimanjaro?",
    o:["4,167 m","5,137 m","5,895 m","6,962 m"], a:2, ok:"You climbed it o nta m3tob, so this one was free"},
-  {tag:"Mountain", q:"And in Turkey, which 5,000 m+ giant did you conquer?",
+  {q:"And in Turkey, which 5,000 m+ giant did you conquer?",
    o:["Mount Erciyes","Mount Ararat","Mount Kaçkar","Mount Nemrut"], a:1, ok:"5137 m…pff ez peazy"},
-  {tag:"Anime", q:"In “Akira” (1988), what colour is Kaneda's iconic motorcycle?",
+  {q:"In “Akira” (1988), what colour is Kaneda's iconic motorcycle?",
    o:["Black","Red","White","Yellow"], a:1, ok:"Red…the most famous slide in anime history (walakin dima khedra)."},
-  {tag:"Moto", q:"In a corner, what's the name of the move where the rider drops a knee to the asphalt?",
+  {q:"In a corner, what's the name of the move where the rider drops a knee to the asphalt?",
    o:["Wheelie","Stoppie","Knee down","Burnout"], a:2, ok:"a7"},
-  {tag:"3D printing", q:"In FDM 3D printing, what does “FDM” stand for?",
+  {q:"In FDM 3D printing, what does “FDM” stand for?",
    o:["Fast Digital Molding","Fused Deposition Modeling","Filament Direct Melting","Flexible Design Mode"], a:1, ok:"No idea what this is"},
-  {tag:"3D printing", q:"Which beginner-friendly filament is made from plant starch, like corn?",
+  {q:"Which beginner-friendly filament is made from plant starch, like corn?",
    o:["ABS","PETG","PLA","TPU"], a:2, ok:"No idea what this is 2"},
-  {tag:"Game of Thrones", q:"What was the name of Ned Stark's Valyrian steel greatsword, later melted down by Tywin Lannister?",
+  {q:"What was the name of Ned Stark's Valyrian steel greatsword, later melted down by Tywin Lannister?",
    o:["Longclaw","Ice","Widow's Wail","Dawn"], a:1, ok:"Winter is coming… and so is your surprise"},
-  {tag:"One Piece", q:"What is Luffy's dream?",
+  {q:"What is Luffy's dream?",
    o:["Find the All Blue","Become King of the Pirates","Defeat Shanks","Map the whole world"], a:1, ok:"And you, king of n3ass in every position"},
-  {tag:"Attack on Titan", q:"What gear lets the Survey Corps fly between the Titans?",
+  {q:"What gear lets the Survey Corps fly between the Titans?",
    o:["Thunder spears","ODM gear","Titan serum","Grappling bow"], a:1, ok:"Shinzou wo sasageyo!"},
-  {tag:"Gaming", q:"Which studio made Elden Ring and the Dark Souls series?",
+  {q:"Which studio made Elden Ring and the Dark Souls series?",
    o:["CD Projekt Red","FromSoftware","Naughty Dog","Bethesda"], a:1, ok:"You died… but not here"},
-  {tag:"Electro", q:"A classic techno track usually runs at around…",
+  {q:"A classic techno track usually runs at around…",
    o:["80–90 BPM","100–110 BPM","125–135 BPM","170–175 BPM"], a:2, ok:"Right on the beat"},
-  {tag:"Final clue", q:"Last bend. Before using her real name, under which alias did Charlotte de Witte start DJing?",
+  {q:"Last bend. Before using her real name, under which alias did Charlotte de Witte start DJing?",
    o:["Dark Charlotte","Raving George","Lady Ghent","CDW Unit"], a:1, ok:"3la slamtek"}
 ];
+const WRONG = "Wroooong, muahaha";
 const TOP = 1500;
 const STEP = TOP / QUESTIONS.length;
 let state = {i:0, alt:0};
@@ -168,6 +222,19 @@ const trail=$("#trail"), done=$("#done"), bike=$("#bike"), gval=$("#gval");
 const total=trail.getTotalLength(), gLen=gval.getTotalLength();
 gval.style.strokeDasharray=gLen;
 
+/* graduations du compteur */
+(function(){
+  const cx=60, cy=58.2, a0=154, a1=386, rad=d=>d*Math.PI/180;
+  let h="";
+  for(let k=0;k<=10;k++){
+    const a=rad(a0+(a1-a0)*k/10), r1=k%5?38:35, r2=42;
+    h+=`<line class="tick" x1="${(cx+r1*Math.cos(a)).toFixed(1)}" y1="${(cy+r1*Math.sin(a)).toFixed(1)}" x2="${(cx+r2*Math.cos(a)).toFixed(1)}" y2="${(cy+r2*Math.sin(a)).toFixed(1)}"/>`;
+  }
+  const rs=rad(a0+(a1-a0)*.85), re=rad(a1), R=44;
+  h+=`<path class="red" d="M${(cx+R*Math.cos(rs)).toFixed(1)} ${(cy+R*Math.sin(rs)).toFixed(1)} A${R} ${R} 0 0 1 ${(cx+R*Math.cos(re)).toFixed(1)} ${(cy+R*Math.sin(re)).toFixed(1)}"/>`;
+  $("#ticks").innerHTML=h;
+})();
+
 function update(){
   const len = total*Math.min(state.alt/TOP,1);
   const p = trail.getPointAtLength(len);
@@ -176,16 +243,26 @@ function update(){
   pts.push(p.x.toFixed(1)+" "+p.y.toFixed(1));
   done.setAttribute("d", pts.length>1 ? "M"+pts.join(" L") : "");
   gval.style.strokeDashoffset = gLen*(1-state.alt/TOP);
-  $("#alt").textContent = Math.round(state.alt).toLocaleString("en-US")+" m";
+  $("#alt").textContent = Math.round(state.alt).toLocaleString("en-US");
+}
+
+function revBar(n){
+  const N=QUESTIONS.length;
+  return `<div class="rev" aria-hidden="true">${Array.from({length:N},(_,k)=>{
+    const cls = k<n ? "on"+(k>=N-2?" max":k>=Math.round(N*.6)?" hot":"") : "";
+    return `<i class="${cls}"></i>`;}).join("")}</div>`;
 }
 
 function renderQuestion(){
   const Q=QUESTIONS[state.i];
   $("#stage").innerHTML=`
-    <section class="card" aria-live="polite">
-      <div class="qmeta"><span class="tag">${Q.tag}</span><span>Gear ${state.i+1} / ${QUESTIONS.length}</span></div>
+    <section class="card pop" aria-live="polite">
+      <div class="qmeta">
+        <span></span>
+        <span class="gear">${revBar(state.i)}<span>GEAR</span><b>${state.i+1}</b><span>/ ${QUESTIONS.length}</span></span>
+      </div>
       <p class="q">${Q.q}</p>
-      <div class="opts">${Q.o.map((t,k)=>`<button class="opt" data-k="${k}">${t}</button>`).join("")}</div>
+      <div class="opts">${Q.o.map((t,k)=>`<button class="opt" id="opt-${state.i}-${k}" data-k="${k}"><span class="key">${"ABCD"[k]}</span><span>${t}</span></button>`).join("")}</div>
       <p class="feedback" id="fb">&nbsp;</p>
     </section>`;
   document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.k,b));
@@ -198,16 +275,18 @@ function answer(k,btn){
     card.querySelectorAll(".opt").forEach(b=>b.disabled=true);
     fb.className="feedback ok"; fb.textContent=Q.ok;
     state.alt=STEP*(state.i+1); update();
+    card.querySelector(".rev").outerHTML=revBar(state.i+1);
     const last=state.i===QUESTIONS.length-1;
     const n=document.createElement("button");
-    n.className="next"; n.textContent= last ? "Open your gift" : "Shift up";
+    n.className="next"; n.id="next-"+state.i;
+    n.innerHTML=`<span>${last ? "Open your gift →" : "Shift up →"}</span>`;
     n.onclick=()=>{ if(last) renderGift(); else {state.i++; renderQuestion();} };
     card.appendChild(n); n.focus();
   } else {
     btn.classList.add("wrong"); btn.disabled=true;
-    card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
+    card.classList.remove("shake","pop"); void card.offsetWidth; card.classList.add("shake");
     state.alt=Math.max(0,state.alt-200); update();
-    fb.className="feedback ko"; fb.textContent="Wroooong, muahaha";
+    fb.className="feedback ko"; fb.textContent=WRONG;
   }
 }
 
@@ -217,21 +296,40 @@ function renderGift(){
   $("#endlbl").textContent="Le Châble · 1,500 m";
   $("#stage").innerHTML=`
     <section class="ticket pop" aria-live="polite">
+      <div class="checker" aria-hidden="true"></div>
       <div class="ticket-in">
         <span class="eyebrow">Summit reached · your gift</span>
-        <h2>Polaris 2026</h2>
+        <h2>Polaris<br><span>2026</span></h2>
         <dl class="rows">
           <dt>Dates</dt><dd>27 &amp; 28 November 2026</dd>
           <dt>Country</dt><dd>Switzerland</dd>
-          <dt>On stage</dt><dd><strong style="color:var(--fuel)">Charlotte de Witte</strong>, yes, DJiya 7ob 9elbek.</dd>
+          <dt>On stage</dt><dd><strong style="color:var(--fuel)">Charlotte de Witte</strong>, DJiya 7ob 9elbek.</dd>
         </dl>
-        <div class="perf"></div>
-        <p class="note">All the details are in your ticket, coming by message.</p>
-        <p class="sign">To kick off your 30th year with a straight shot of dopamine b lkezz, heavy bass and titiza dyalek on stage. Happy birthday Achraf.</p>
+        <div class="perf" aria-hidden="true"></div>
+        <p class="note">All the details are in your ticket.</p>
+        <p class="sign">To kick off your 30th year with a straight shot of dopamine, lkezzz, heavy bass and titiza dyalek on stage...Happy birthday Achraf</p>
         <button class="again" id="again">Ride again</button>
       </div>
     </section>`;
-  $("#again").onclick=()=>{state={i:0,alt:0};$("#endlbl").textContent="??? · 1,500 m";update();renderQuestion();};
+  $("#again").onclick=()=>{state={i:0,alt:0};$("#endlbl").textContent="??? · 1,500 m";update();renderQuestion();window.scrollTo({top:0,behavior:"smooth"});};
+  confetti();
+}
+
+/* confettis au sommet */
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c=$("#confetti"), x=c.getContext("2d"); c.hidden=false;
+  const W=c.width=innerWidth, H=c.height=innerHeight;
+  const cols=["#ff5b14","#ffc627","#f1eee8","#ff3b3f"];
+  const P=Array.from({length:140},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.35,vx:(Math.random()-.5)*11,vy:-Math.random()*12-4,
+    s:Math.random()*6+4,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.random()*4|0]}));
+  let t=0;
+  (function f(){
+    x.clearRect(0,0,W,H);
+    P.forEach(p=>{p.vy+=.32;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+      x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});
+    if(++t<180) requestAnimationFrame(f); else {x.clearRect(0,0,W,H);c.hidden=true;}
+  })();
 }
 
 update(); renderQuestion();
